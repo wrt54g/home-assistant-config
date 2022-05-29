@@ -1,0 +1,89 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+    language: "nl"
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+
+
+sensor:
+  - platform: imap
+    server: #**REDACTED**
+    username: #**REDACTED**
+    password: #**REDACTED**
+  - platform: imap
+    server: #**REDACTED**
+    username: #**REDACTED**
+    password: #**REDACTED**
+  - platform: imap
+    server: #**REDACTED**
+    username: #**REDACTED**
+    password: #**REDACTED**
+  - platform: imap
+    server: #**REDACTED**
+    username: #**REDACTED**
+    password: #**REDACTED**
+  - platform: imap
+    server: #**REDACTED**
+    username: #**REDACTED**
+    password: #**REDACTED**
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /config
+      - type: memory_free
+  - platform: hvcgroep
+    postcode: #**REDACTED**
+    huisnummer: #**REDACTED**
+    resources:
+      - gft
+      - plastic
+      - papier
+      - restafval
+  - platform: youtube
+    channel_id: UCbX3YkedQunLt7EQAdVxh7w
+  - platform: youtube
+    channel_id: UC2gyzKcHbYfqoXA5xbyGXtQ
+  - platform: youtube
+    channel_id: UCwOBG77Tm8cE24FPxHb_abw
+  - platform: youtube
+    channel_id: UC4w1YQAJMWOz4qtxinq55LQ
+
+
+
+notify:
+  - platform: kodi
+    name: Kodi
+    host: 192.168.50.112
+    
+binary_sensor:
+  - platform: ping
+    host: 192.168.107.20
+    count: 1
+    scan_interval: 1
+    name: PIR Gang ping Extender
+  - platform: ping
+    host: 192.168.107.21
+    count: 1
+    scan_interval: 1
+    name: PIR Gang ping AP
+  - platform: ping
+    host: 192.168.107.11
+    count: 1
+    scan_interval: 1
+    name: Extender Schuur
+    
+    
+browser_mod:
+    
+keyboard_remote:
+  - device_descriptor: '/dev/input/event0'
+    type: 'key_down'
