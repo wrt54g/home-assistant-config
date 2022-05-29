@@ -1,2 +1,2 @@
+# THIS IS UNDER CONSTRUCTION! PLEASE WAIT WITH PRS AND ISSUES UNTIL THIS LINE IS REMOVED!
 # home-assistant-config
-My Home Assistant configuration (passwords removed of course😁)
