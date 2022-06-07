@@ -1,0 +1,20 @@
+alias: 'safety: Turn chargers off at night'
+description: 'This automation is used to turn the chargers off at night for safety reasons.'
+trigger:
+  - platform: time
+    at: '22:00:00'
+condition: []
+action:
+  - type: turn_off
+    device_id: REDACTED
+    entity_id: switch.bedsidecharger
+    domain: switch
+  - type: turn_off
+    device_id: REDACTED
+    entity_id: switch.stadiacontroller
+    domain: switch
+  - type: turn_off
+    device_id: REDACTED
+    entity_id: switch.bathroomplug
+    domain: switch
+mode: single
