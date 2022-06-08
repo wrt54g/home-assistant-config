@@ -1,0 +1,20 @@
+alias: 'safety: Turn chargers on'
+description: 'Turns the chargers back on in the morning.'
+trigger:
+  - platform: time
+    at: '06:30'
+condition: []
+action:
+  - type: turn_on
+    device_id: 7cb658a50c6dd6e55a2a9e9e7c71af00
+    entity_id: switch.bedsidecharger
+    domain: switch
+  - type: turn_on
+    device_id: c0fed4c842de950bedd2cc5ca6886548
+    entity_id: switch.stadiacontroller
+    domain: switch
+  - type: turn_on
+    device_id: 1e679552a6654dc10898a72d355a65f0
+    entity_id: switch.bathroomplug
+    domain: switch
+mode: single
