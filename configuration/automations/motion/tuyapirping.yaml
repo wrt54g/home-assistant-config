@@ -1,0 +1,22 @@
+alias: 'motion: LSC Sensor ping'
+description: 'See http://www.dypodex.nl/sven/automations/tuya-ha-devices/'
+trigger:
+  - platform: state
+    entity_id: binary_sensor.pir_ping
+    to: 'on'
+condition: []
+action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.pir_hallway
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 29
+      milliseconds: 0
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.pir_hallway
+mode: single
