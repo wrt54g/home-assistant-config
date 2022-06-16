@@ -1022,6 +1022,7 @@ MEASUREMENT_DICT = {
     'K9B-1BTN'                : [["rssi"], ["one btn switch"], []],
     'K9B-2BTN'                : [["rssi"], ["two btn switch left", "two btn switch right"], []],
     'K9B-3BTN'                : [["rssi"], ["three btn switch left", "three btn switch middle", "three btn switch right"], []],
+    'XMWXKG01YL'              : [["rssi"], ["two btn switch left", "two btn switch right"], []],
     'YLAI003'                 : [["rssi", "battery"], ["button"], []],
     'YLYK01YL'                : [["rssi"], ["remote"], ["remote single press", "remote long press"]],
     'YLYK01YL-FANCL'          : [["rssi"], ["fan remote"], []],
@@ -1140,6 +1141,7 @@ MANUFACTURER_DICT = {
     'K9B-1BTN'                : 'Linptech',
     'K9B-2BTN'                : 'Linptech',
     'K9B-3BTN'                : 'Linptech',
+    'XMWXKG01YL'              : 'Xiaomi',
     'ATC'                     : 'ATC',
     'Mi Scale V1'             : 'Xiaomi',
     'Mi Scale V2'             : 'Xiaomi',
@@ -1217,7 +1219,12 @@ RENAMED_MODEL_DICT = {
 
 # Sensors that support automatic adding of sensors and binary sensors
 AUTO_MANUFACTURER_DICT = {
+    'HHCCJCY10'               : 'HHCC',
+    'HHCCJCY10'               : 'HHCC',
     'HA BLE DIY'              : 'Home Assistant DIY',
+    'TG-BT5-IN'               : 'Mikrotik',
+    'TG-BT5-OUT'              : 'Mikrotik',
+    'TP359'                   : 'Thermopro',
     'Tilt Red'                : 'Tilt',
     'Tilt Green'              : 'Tilt',
     'Tilt Black'              : 'Tilt',
@@ -1227,10 +1234,6 @@ AUTO_MANUFACTURER_DICT = {
     'Tilt Yellow'             : 'Tilt',
     'Tilt Pink'               : 'Tilt',
     'Tilt Green'              : 'Tilt',
-    'HHCCJCY10'               : 'HHCC',
-    'HHCCJCY10'               : 'HHCC',
-    'TG-BT5-IN'               : 'Mikrotik',
-    'TG-BT5-OUT'              : 'Mikrotik',
 }
 
 
