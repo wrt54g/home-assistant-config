@@ -13,4 +13,4 @@ Terminal & SSH=9.4.0<br>
 <br>
 Custom add-ons:<br>
 ESPhome (Dev)=dev<br>
-ESPhome (Beta)=2022.6.0
+ESPhome (Beta)=2022.6.1
