@@ -95,7 +95,9 @@ def get_players_schema(hass: HomeAssistant, cur_conf: dict) -> vol.Schema:
             continue
         # require some basic features, most important `play_media`
         if not (
-            entity.support_play_media and entity.support_play and entity.support_pause
+            entity.support_play_media
+            and entity.support_play
+            and entity.support_volume_set
         ):
             exclude_entities.append(entity_id)
 
@@ -169,10 +171,12 @@ def get_music_schema(cur_conf: dict):
 def validate_config(user_input: dict) -> dict:
     """Validate config and return dict with any errors."""
     errors = {}
-    # check if music directory is valid
-    music_dir = user_input.get(CONF_FILE_DIRECTORY)
-    if music_dir and not os.path.isdir(music_dir):
-        errors[CONF_FILE_DIRECTORY] = "directory_not_exists"
+    # check file provider config
+    if user_input.get(CONF_FILE_ENABLED):
+        # check if music directory is valid
+        music_dir = user_input.get(CONF_FILE_DIRECTORY)
+        if music_dir and not os.path.isdir(music_dir):
+            errors[CONF_FILE_DIRECTORY] = "directory_not_exists"
     return errors
 
 
@@ -222,6 +226,13 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors = validate_config(user_input)
 
             if not errors:
+                # config complete, store entry
+                self.data.update(user_input)
+                hide_player_entities(
+                    self.hass,
+                    self.data[CONF_PLAYER_ENTITIES],
+                    self.data[CONF_HIDE_SOURCE_PLAYERS],
+                )
                 return self.async_create_entry(
                     title=DEFAULT_NAME, data={}, options={**self.data}
                 )
@@ -285,14 +296,18 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         """Handle getting advanced config options from the user."""
 
         if user_input is not None:
-            # config complete, store entry
             self.data.update(user_input)
-            hide_player_entities(
-                self.hass,
-                self.data[CONF_PLAYER_ENTITIES],
-                self.data[CONF_HIDE_SOURCE_PLAYERS],
-            )
-            return self.async_create_entry(title=DEFAULT_NAME, data={**self.data})
+            errors = validate_config(user_input)
+
+            if not errors:
+                # config complete, store entry
+                self.data.update(user_input)
+                hide_player_entities(
+                    self.hass,
+                    self.data[CONF_PLAYER_ENTITIES],
+                    self.data[CONF_HIDE_SOURCE_PLAYERS],
+                )
+                return self.async_create_entry(title=DEFAULT_NAME, data={**self.data})
 
         return self.async_show_form(
             step_id="adv",

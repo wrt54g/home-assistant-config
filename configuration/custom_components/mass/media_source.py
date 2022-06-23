@@ -63,7 +63,7 @@ LIBRARY_MEDIA_CLASS_MAP = {
     LIBRARY_ALBUMS: MEDIA_CLASS_ALBUM,
     LIBRARY_TRACKS: MEDIA_CLASS_TRACK,
     LIBRARY_PLAYLISTS: MEDIA_CLASS_PLAYLIST,
-    LIBRARY_RADIO: MEDIA_CLASS_MUSIC,
+    LIBRARY_RADIO: MEDIA_CLASS_MUSIC,  # radio is not accepted by HA
 }
 
 MEDIA_CONTENT_TYPE_FLAC = "audio/flac"
@@ -344,14 +344,18 @@ class MusicAssistentSource(MediaSource):
             children_media_class=media_class,
             children=await asyncio.gather(
                 *[
-                    self._build_item(mass, track, can_expand=False)
+                    self._build_item(
+                        mass, track, can_expand=False, media_class=media_class
+                    )
                     for track in await mass.music.radio.library()
                 ],
             ),
         )
 
     @staticmethod
-    async def _build_item(mass: MusicAssistant, item: MediaItemType, can_expand=True):
+    async def _build_item(
+        mass: MusicAssistant, item: MediaItemType, can_expand=True, media_class=None
+    ):
         """Return BrowseMediaSource for MediaItem."""
         if hasattr(item, "artists"):
             title = f"{item.artists[0].name} - {item.name}"
@@ -370,7 +374,7 @@ class MusicAssistentSource(MediaSource):
             domain=DOMAIN,
             identifier=item.uri,
             title=title,
-            media_class=item.media_type.value,
+            media_class=media_class or item.media_type.value,
             media_content_type=MEDIA_CONTENT_TYPE_FLAC,
             can_play=True,
             can_expand=can_expand,

@@ -60,8 +60,7 @@ from .const import (
 
 LOGGER = logging.getLogger(__name__)
 
-OFF_STATES = (STATE_OFF, STATE_UNAVAILABLE, STATE_UNKNOWN, STATE_STANDBY)
-UNAVAILABLE_STATES = (STATE_UNAVAILABLE, STATE_UNKNOWN)
+OFF_STATES = (STATE_OFF, STATE_UNAVAILABLE, STATE_STANDBY)
 CAST_DOMAIN = "cast"
 CAST_MULTIZONE_MANAGER_KEY = "cast_multizone_manager"
 
@@ -72,7 +71,7 @@ GROUP_DOMAIN = "group"
 STATE_MAPPING = {
     STATE_OFF: PlayerState.OFF,
     STATE_ON: PlayerState.IDLE,
-    STATE_UNKNOWN: PlayerState.OFF,
+    STATE_UNKNOWN: PlayerState.IDLE,
     STATE_UNAVAILABLE: PlayerState.OFF,
     STATE_IDLE: PlayerState.IDLE,
     STATE_PLAYING: PlayerState.PLAYING,
@@ -253,8 +252,10 @@ class HassPlayer(Player):
 
     async def play_url(self, url: str) -> None:
         """Play the specified url on the player."""
+        # a lot of players do not power on at playback request so send power on from here
+        if not self.powered:
+            await self.power(True)
         LOGGER.debug("[%s] play_url: %s", self.entity_id, url)
-        self._attr_powered = True
         self._attr_current_url = url
         if self.use_mute_as_power:
             await self.volume_mute(False)
@@ -276,6 +277,12 @@ class HassPlayer(Player):
 
     async def pause(self) -> None:
         """Send PAUSE command to player."""
+        if not self.entity.support_pause:
+            LOGGER.warning(
+                "[%s] pause not supported, sending STOP instead...", self.entity_id
+            )
+            await self.stop()
+            return
         LOGGER.debug("[%s] pause", self.entity_id)
         await self.entity.async_media_pause()
 
@@ -745,7 +752,7 @@ class HassGroupPlayer(HassPlayer):
     def update_attributes(self) -> None:
         """Call when player state is about to be updated in the player manager."""
         hass_state = self.hass.states.get(self.entity_id)
-        self._attr_available = hass_state.state not in UNAVAILABLE_STATES
+        self._attr_available = hass_state.state != STATE_UNAVAILABLE
         self._attr_name = hass_state.name
 
         # collect the group childs, be prepared for the usecase where the user actually
@@ -798,25 +805,15 @@ async def async_register_player_control(
     """Register hass media_player entity as player control on Music Assistant."""
 
     # check for existing player first if already registered
-    if player := mass.players.get_player(entity_id, True):
+    if player := mass.players.get_player(entity_id):
         return player
-
-    entity = hass.states.get(entity_id)
-    if entity is None or entity.attributes is None:
-        return
 
     entity_comp = hass.data.get(DATA_INSTANCES, {}).get(MP_DOMAIN)
     if not entity_comp:
-        return
+        return None
     entity: MediaPlayerEntity = entity_comp.get_entity(entity_id)
     if not entity:
-        return
-
-    # require some basic features, most important `play_media`
-    if not entity.support_play_media:
-        return
-    if not entity.support_play or not entity.support_pause:
-        return
+        return None
 
     player = None
     # Integration specific player controls
@@ -846,7 +843,7 @@ async def async_register_player_controls(
             return
 
         # handle existing source player
-        if source_player := mass.players.get_player(entity_id, True):
+        if source_player := mass.players.get_player(entity_id):
             source_player.on_hass_event(event)
             return
         # entity not (yet) registered
