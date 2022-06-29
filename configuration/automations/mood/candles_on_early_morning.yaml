@@ -1,0 +1,31 @@
+alias: 'mood: Candles on early in the morning'
+description: ''
+trigger:
+  - platform: time
+    at: '06:30:00'
+condition:
+  - condition: sun
+    before: sunrise
+  - condition: time
+    weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+  - condition: state
+    entity_id: input_boolean.vacation_mode
+    state: 'off'
+  - condition: state
+    entity_id: input_boolean.away_mode
+    state: 'off'
+action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.candles_on
+  - type: turn_on
+    device_id: ## REDACTED
+    entity_id: switch.ledstring
+    domain: switch
+mode: single
