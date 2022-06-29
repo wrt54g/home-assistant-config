@@ -61,8 +61,7 @@ from music_assistant.models.player_queue import QueueOption, RepeatMode
 
 from .const import (
     ATTR_ACTIVE_QUEUE,
-    ATTR_GROUP_CHILDS,
-    ATTR_GROUP_PARENTS,
+    ATTR_GROUP_MEMBERS,
     ATTR_IS_GROUP,
     ATTR_QUEUE_ITEMS,
     ATTR_SOURCE_ENTITY_ID,
@@ -189,8 +188,8 @@ class MassPlayer(MassBaseEntity, MediaPlayerEntity):
         return {
             ATTR_SOURCE_ENTITY_ID: self.player.player_id,  # player_id = entity_id of HA source entity
             ATTR_IS_GROUP: self.player.is_group,
-            ATTR_GROUP_CHILDS: self.player.group_childs,
-            ATTR_GROUP_PARENTS: self.player.group_parents,
+            ATTR_GROUP_MEMBERS: self.player.group_members,
+            # ATTR_GROUP_PARENTS: self.player.group_parents,
             ATTR_ACTIVE_QUEUE: self.player.active_queue.queue_id,
             ATTR_QUEUE_ITEMS: len(self.player.active_queue.items),
         }
@@ -198,7 +197,7 @@ class MassPlayer(MassBaseEntity, MediaPlayerEntity):
     @property
     def group_members(self) -> list[str]:
         """Return group members of this group player."""
-        return self.player.group_childs
+        return self.player.group_members
 
     @property
     def volume_level(self) -> float:
