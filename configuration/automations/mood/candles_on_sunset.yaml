@@ -9,9 +9,9 @@ action:
   - service: scene.turn_on
     data: {}
     target:
-      entity_id: scene.kaars_aan
+      entity_id: scene.candle_on
   - type: turn_on
     device_id: ## REDACTED
-    entity_id: switch.kaarspot
+    entity_id: switch.ledstring
     domain: switch
 mode: single
