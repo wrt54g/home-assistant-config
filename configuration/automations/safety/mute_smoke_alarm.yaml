@@ -1,4 +1,4 @@
-alias: 'safety: Rookmelder dempen automatisering'
+alias: 'safety: Mute smoke alarm'
 description: ''
 trigger:
   - platform: state
