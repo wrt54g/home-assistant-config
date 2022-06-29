@@ -1,5 +1,5 @@
 alias: 'mood: Candles on sunset'
-description: 'This turns my IR-controlled candles (nedis device tuya-based with scenes '
+description: 'This turns my IR-controlled candles (via nedis device tuya-based with scenes)'
 trigger:
   - platform: sun
     event: sunset
