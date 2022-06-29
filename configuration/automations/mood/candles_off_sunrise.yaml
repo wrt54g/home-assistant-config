@@ -1,0 +1,17 @@
+alias: 'mood: Candles off sunrise.'
+description: ''
+trigger:
+  - platform: sun
+    event: sunrise
+    offset: 0
+condition: []
+action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.candles_off
+  - type: turn_off
+    device_id: ## REDACTED
+    entity_id: switch.ledstring
+    domain: switch
+mode: single
