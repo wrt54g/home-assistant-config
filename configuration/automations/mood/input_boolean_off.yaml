@@ -1,0 +1,15 @@
+alias: 'mood: Candles on>off'
+description: 'For the input boolean.'
+trigger:
+  - platform: state
+    entity_id: input_boolean.candles
+    to: 'off'
+    from: 'on'
+condition: []
+action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id:
+        - scene.candles_off
+mode: single
