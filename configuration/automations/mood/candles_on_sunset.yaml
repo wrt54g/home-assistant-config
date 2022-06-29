@@ -1,0 +1,17 @@
+alias: 'mood: Candles on sunset'
+description: 'This turns my IR-controlled candles (nedis device tuya-based with scenes '
+trigger:
+  - platform: sun
+    event: sunset
+    offset: 0
+condition: []
+action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.kaars_aan
+  - type: turn_on
+    device_id: ## REDACTED
+    entity_id: switch.kaarspot
+    domain: switch
+mode: single
