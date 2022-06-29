@@ -1,0 +1,16 @@
+alias: 'alarm: Simple vacation mode'
+description: ''
+trigger:
+  - platform: state
+    to: 'on'
+    entity_id: input_boolean.vacation_mode
+condition: []
+action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id:
+        - input_boolean.home_mode
+        - input_boolean.away_mode
+        - input_boolean.night_mode
+mode: single
