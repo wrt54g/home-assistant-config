@@ -1,0 +1,19 @@
+alias: 'safety: Rookmelder dempen automatisering'
+description: ''
+trigger:
+  - platform: state
+    entity_id:
+      - input_boolean.mute_smoke_alarm
+    to: 'on'
+condition: []
+action:
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id: input_boolean.mute_smoke_alarm
+mode: single
