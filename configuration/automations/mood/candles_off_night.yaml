@@ -1,0 +1,16 @@
+alias: 'mood: Candles off night'
+description: 'Turns them off at 12 AM'
+trigger:
+  - platform: time
+    at: '00:00:00'
+condition: []
+action:
+  - service: scene.turn_on
+    data: {}
+    target:
+      entity_id: scene.candles_off
+  - type: turn_off
+    device_id: ## REDACTED
+    entity_id: switch.ledstring
+    domain: switch
+mode: single
