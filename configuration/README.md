@@ -1,6 +1,6 @@
 Official:<br>
 Home Assistant=2022.6.7<br>
-Supervisor=2022.05.3<br>
+Supervisor=2022.06.2<br>
 HASSOS=8.2<br>
 Frontend=20220601.0<br>
 <br>
