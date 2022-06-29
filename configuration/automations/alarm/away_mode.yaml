@@ -1,0 +1,16 @@
+alias: 'alarm: Simple away mode'
+description: ''
+trigger:
+  - platform: state
+    entity_id: input_boolean.away_mode
+    to: 'on'
+condition: []
+action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id:
+        - input_boolean.night_mode
+        - input_boolean.vacation_mode
+        - input_boolean.home_mode
+mode: single
