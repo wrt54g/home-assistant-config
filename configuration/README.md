@@ -8,7 +8,7 @@ Add-ons:<br>
 AdGuard Home=4.6.0<br>
 File editor=5.3.3<br>
 Mosquitto broker=6.1.2<br>
-Samba share=9.7.0<br>
+Samba share=10.0.0<br>
 Terminal & SSH=9.4.0<br>
 <br>
 Custom add-ons:<br>
