@@ -1,0 +1,81 @@
+alias: 'safety: Smoke alarm master bedroom'
+description: ''
+trigger:
+  - type: smoke
+    platform: device
+    device_id: a7cb998bd722b009af72cd6390db6703
+    entity_id: binary_sensor.smoke_alarm
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+condition: []
+action:
+  - service: media_player.volume_set
+    data:
+      volume_level: 0.25
+    target:
+      entity_id: media_player.master_bedroom
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.master_bedroom
+    data:
+      media_content_id: >-
+        media-source://tts/google_translate?message=Smoke+is+detected+in+the+master+bedroom%21
+      media_content_type: provider
+    metadata:
+      title: Smoke is detected in the master bedroom!
+      thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
+      media_class: app
+      children_media_class: null
+      navigateIds:
+        - {}
+        - media_content_type: app
+          media_content_id: media-source://tts
+        - media_content_type: provider
+          media_content_id: >-
+            media-source://tts/google_translate?message=Smoke+is+detected+in+the+master+bedroom%21
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 8
+      milliseconds: 0
+  - repeat:
+      until:
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: input_boolean.mute_smoke_alarm
+              state: 'on'
+            - type: is_no_smoke
+              condition: device
+              device_id: ## REDACTED
+              entity_id: binary_sensor.smoke_alarm
+              domain: binary_sensor
+      sequence:
+        - service: media_player.play_media
+          target:
+            entity_id: media_player.master_bedroom
+          data:
+            media_content_id: media-source://media_source/local/alarm_clock.mp3
+            media_content_type: audio/mpeg
+          metadata:
+            title: Alarm clock
+            thumbnail: null
+            media_class: music
+            children_media_class: null
+            navigateIds:
+              - {}
+              - media_content_type: app
+                media_content_id: media-source://media_source
+        - delay:
+            hours: 0
+            minutes: 4
+            seconds: 0
+            milliseconds: 0
+  - service: notify.notify
+    data:
+      message: Smoke is detected in the master bedroom!
+      title: Smoke alarm!
+mode: single
