@@ -114,7 +114,7 @@ CONF_HMAX = 99.9
 
 # Sensors with deviating temperature range
 KETTLES = ('YM-K1501', 'YM-K1501EU', 'V-SK152')
-PROBES = ('iBBQ-2', 'iBBQ-4', 'iBBQ-6', 'H5183')
+PROBES = ('iBBQ-2', 'iBBQ-4', 'iBBQ-6', 'H5182', 'H5183', 'H5185')
 
 
 # Sensor entity description
@@ -404,16 +404,6 @@ SENSOR_TYPES: tuple[BLEMonitorSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
     ),
     BLEMonitorSensorEntityDescription(
-        key="temperature outdoor",
-        sensor_class="TemperatureSensor",
-        update_behavior="Averaging",
-        name="ble temperature outdoor",
-        unique_id="t_outdoor_",
-        native_unit_of_measurement=TEMP_CELSIUS,
-        device_class=SensorDeviceClass.TEMPERATURE,
-        state_class=SensorStateClass.MEASUREMENT,
-    ),
-    BLEMonitorSensorEntityDescription(
         key="temperature alarm probe 1",
         sensor_class="TemperatureSensor",
         update_behavior="Averaging",
@@ -460,16 +450,6 @@ SENSOR_TYPES: tuple[BLEMonitorSensorEntityDescription, ...] = (
         name="ble cypress humidity",
         unique_id="h_cypress_",
         native_unit_of_measurement="RH%",
-        device_class=SensorDeviceClass.HUMIDITY,
-        state_class=SensorStateClass.MEASUREMENT,
-    ),
-    BLEMonitorSensorEntityDescription(
-        key="humidity outdoor",
-        sensor_class="HumiditySensor",
-        update_behavior="Averaging",
-        name="ble humidity outdoor",
-        unique_id="h_outdoor_",
-        native_unit_of_measurement=PERCENTAGE,
         device_class=SensorDeviceClass.HUMIDITY,
         state_class=SensorStateClass.MEASUREMENT,
     ),
@@ -1043,7 +1023,8 @@ MEASUREMENT_DICT = {
     'H5101/H5102/H5177'       : [["temperature", "humidity", "battery", "rssi"], [], []],
     'H5051/H5071'             : [["temperature", "humidity", "battery", "rssi"], [], []],
     'H5074'                   : [["temperature", "humidity", "battery", "rssi"], [], []],
-    'H5178'                   : [["temperature", "temperature outdoor", "humidity", "humidity outdoor", "battery", "rssi"], [], []],
+    'H5178'                   : [["temperature", "humidity", "battery", "rssi"], [], []],
+    'H5178-outdoor'           : [["temperature", "humidity", "battery", "rssi"], [], []],
     'H5179'                   : [["temperature", "humidity", "battery", "rssi"], [], []],
     'H5182'                   : [["temperature probe 1", "temperature alarm probe 1", "temperature probe 2", "temperature alarm probe 2", "rssi"], [], []],
     'H5183'                   : [["temperature probe 1", "temperature alarm probe 1", "rssi"], [], []],
@@ -1087,15 +1068,18 @@ MEASUREMENT_DICT = {
     'AltBeacon'               : [["rssi", "measured power"], ["uuid", "mac", "major", "minor"], []],  # mac can be dynamic
     'EClerk Eco'              : [["temperature", "humidity", "co2", "battery", "rssi"], [], []],
     'Air Mentor Pro 2'        : [["temperature", "temperature calibrated", "humidity", "co2", "tvoc", "aqi", "air quality", "pm2.5", "pm10", "rssi"], [], []],
+    'bluSensor Mini'          : [["temperature", "humidity", "co2", "tvoc", "aqi", "rssi"], [], []],
     'Meter TH S1'             : [["temperature", "humidity", "battery", "rssi"], [], []],
     'Meter TH plus'           : [["temperature", "humidity", "battery", "rssi"], [], []],
     'Laica Smart Scale'       : [["weight", "impedance", "rssi"], [], []],
     "Acconeer XM122"          : [["temperature", "battery", "rssi"], [], ["motion"]],
     'K6 Sensor Beacon'        : [["temperature", "humidity", "acceleration", "voltage", "battery", "rssi"], [], []],
+    'DSL-C08'                 : [["battery", "rssi", "voltage"], [], ["lock", "childlock"]],
 }
 
 # Sensor manufacturer dictionary
 MANUFACTURER_DICT = {
+    'DSL-C08'                 : 'Lockin',
     'LYWSDCGQ'                : 'Xiaomi',
     'LYWSD02'                 : 'Xiaomi',
     'LYWSD03MMC'              : 'Xiaomi',
@@ -1157,7 +1141,9 @@ MANUFACTURER_DICT = {
     'H5051/H5071'             : 'Govee',
     'H5074'                   : 'Govee',
     'H5178'                   : 'Govee',
+    'H5178-outdoor'           : 'Govee',
     'H5179'                   : 'Govee',
+    'H5182'                   : 'Govee',
     'H5183'                   : 'Govee',
     'H5185'                   : 'Govee',
     'Ruuvitag'                : 'Ruuvitag',
@@ -1199,6 +1185,7 @@ MANUFACTURER_DICT = {
     'AltBeacon'               : 'Radius Networks',
     'EClerk Eco'              : 'Relsib',
     'Air Mentor Pro 2'        : 'Air Mentor',
+    'bluSensor Mini'          : 'Almendo',
     'Meter TH S1'             : 'Switchbot',
     'Meter TH plus'           : 'Switchbot',
     'Laica Smart Scale'       : 'Laica',
