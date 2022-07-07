@@ -81,14 +81,16 @@ def hide_player_entities(
 @callback
 def get_players_schema(hass: HomeAssistant, cur_conf: dict) -> vol.Schema:
     """Return player config schema."""
+    control_entities = hass.states.async_entity_ids(MP_DOMAIN)
     # filter any non existing device id's from the list to prevent errors
-    control_entities = hass.states.async_entity_ids("media_player")
     cur_ids = [
         item for item in cur_conf[CONF_PLAYER_ENTITIES] if item in control_entities
     ]
     # blacklist unsupported and mass entities
     exclude_entities = []
-    for entity_id in hass.states.async_entity_ids(MP_DOMAIN):
+    for entity_id in control_entities:
+        if entity_id in cur_ids:
+            continue
         entity_comp = hass.data.get(DATA_INSTANCES, {}).get(MP_DOMAIN)
         entity: MediaPlayerEntity = entity_comp.get_entity(entity_id)
         if (
