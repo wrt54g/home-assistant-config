@@ -1,0 +1,26 @@
+alias: 'motion: Hallway light PIR'
+description: 'LSC Motion sensor hallway light automation.'
+trigger:
+  - platform: state
+    entity_id: input_boolean.hallway_motion
+    from: 'off'
+    to: 'on'
+condition:
+  - condition: sun
+    after: sunset
+action:
+  - type: turn_on
+    device_id: ##REDACTED
+    entity_id: light.hallway_light
+    domain: light
+    brightness_pct: 100
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: ##REDACTED
+    entity_id: light.hallway_light
+    domain: light
+mode: single
