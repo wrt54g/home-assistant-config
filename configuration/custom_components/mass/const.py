@@ -21,6 +21,10 @@ CONF_QOBUZ_PASSWORD = "qobuz_password"
 CONF_TUNEIN_ENABLED = "tunein_enabled"
 CONF_TUNEIN_USERNAME = "tunein_username"
 
+CONF_YTMUSIC_ENABLED = "ytmusic_enabled"
+CONF_YTMUSIC_USERNAME = "ytmusic_username"
+CONF_YTMUSIC_PASSWORD = "ytmusic_password"
+
 CONF_FILE_ENABLED = "filesystem_enabled"
 CONF_FILE_DIRECTORY = "filesystem_directory"
 CONF_PLAYLISTS_DIRECTORY = "playlists_directory"
