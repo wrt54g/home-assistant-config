@@ -2,7 +2,7 @@ alias: 'motion: Hallway light PIR'
 description: 'LSC Motion sensor hallway light automation.'
 trigger:
   - platform: state
-    entity_id: input_boolean.hallway_motion
+    entity_id: input_boolean.pir_hallway
     from: 'off'
     to: 'on'
 condition:
