@@ -1,5 +1,5 @@
 Official:<br>
-Home Assistant=2022.7.3<br>
+Home Assistant=2022.7.4<br>
 Supervisor=2022.07.0<br>
 HASSOS=8.3<br>
 Frontend=20220707.0<br>
