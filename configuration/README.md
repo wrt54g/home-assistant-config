@@ -1,8 +1,8 @@
 Official:<br>
-Home Assistant=2022.7.4<br>
+Home Assistant=2022.7.5<br>
 Supervisor=2022.07.0<br>
 HASSOS=8.3<br>
-Frontend=20220707.0<br>
+Frontend=20220707.1<br>
 <br>
 Add-ons:<br>
 AdGuard Home=4.6.0<br>
