@@ -5,7 +5,7 @@ HASSOS=8.3<br>
 Frontend=20220707.1<br>
 <br>
 Add-ons:<br>
-AdGuard Home=4.6.0<br>
+AdGuard Home=4.6.1<br>
 File editor=5.3.3<br>
 Mosquitto broker=6.1.2<br>
 Samba share=10.0.0<br>
