@@ -47,7 +47,7 @@ from .websockets import async_register_websockets
 
 LOGGER = logging.getLogger(__name__)
 
-PLATFORMS = ("media_player", "switch", "number")
+PLATFORMS = ("media_player", "switch", "number", "select")
 FORWARD_EVENTS = (
     EventType.QUEUE_ADDED,
     EventType.QUEUE_UPDATED,

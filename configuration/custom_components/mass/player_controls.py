@@ -4,7 +4,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from datetime import datetime
-from typing import List, Optional, Tuple
+from typing import List, Optional
 from uuid import UUID
 
 from homeassistant.components.media_player import DOMAIN as MP_DOMAIN
@@ -355,29 +355,24 @@ class SlimprotoPlayer(HassPlayer):
         ]
 
     @property
-    def default_sample_rates(self) -> Tuple[int]:
-        """Return the default supported sample rates."""
-        if self.entity.player.max_sample_rate is None:
-            return (44100, 48000)
-        return tuple(
-            sample_rate
-            for sample_rate in (
-                44100,
-                48000,
-                88200,
-                96000,
-                176400,
-                192000,
-                352800,
-                384000,
-            )
-            if sample_rate <= int(self.entity.player.max_sample_rate)
-        )
+    def elapsed_time(self) -> float:
+        """Return elapsed time of current playing media in seconds."""
+        # slimproto has very accurate realtime timestamp, prefer that
+        return self.entity.player.elapsed_seconds
+
+    @property
+    def max_sample_rate(self) -> int:
+        """Return the (default) max supported sample rate."""
+        return int(self.entity.player.max_sample_rate)
 
     @property
     def default_stream_type(self) -> ContentType:
         """Return the default content type to use for streaming."""
-        return self._attr_default_stream_type
+        if "flac" in self.entity.player.supported_codecs:
+            return ContentType.FLAC
+        if "wav" in self.entity.player.supported_codecs:
+            return ContentType.WAV
+        return ContentType.MP3
 
     @callback
     def on_remove(self) -> None:
@@ -389,6 +384,7 @@ class SlimprotoPlayer(HassPlayer):
     @callback
     def on_squeezebox_event(self, event: Event) -> None:
         """Handle special events from squeezebox players."""
+        print(event)
         if event.data["entity_id"] != self.entity_id:
             return
         cmd = event.data["command_str"]
@@ -403,8 +399,8 @@ class ESPHomePlayer(HassPlayer):
 
     _attr_use_mute_as_power: bool = True
 
-    _attr_default_sample_rates: Tuple[int] = (44100, 48000)
-    _attr_default_stream_type: ContentType = ContentType.MP3
+    _attr_max_sample_rate: int = 48000
+    _attr_stream_type: ContentType = ContentType.MP3
     _attr_media_pos_updated_at: Optional[datetime] = None
 
     @property
@@ -466,8 +462,8 @@ class KodiPlayer(HassPlayer):
 class CastPlayer(HassPlayer):
     """Representation of Hass player from cast integration."""
 
-    _attr_default_sample_rates: Tuple[int] = (44100, 48000, 88200, 96000)
-    _attr_default_stream_type: ContentType = ContentType.FLAC
+    _attr_max_sample_rate: int = 96000
+    _attr_stream_type: ContentType = ContentType.FLAC
     _attr_use_mute_as_power = True
     _attr_is_group = False
 
@@ -523,6 +519,7 @@ class CastPlayer(HassPlayer):
             "media_id": url,
             "media_type": f"audio/{self.active_queue.settings.stream_type.value}",
             "enqueue": False,
+            "stream_type": "LIVE",
             "title": f" Streaming from {DEFAULT_NAME}",
         }
         await self.hass.async_add_executor_job(
@@ -531,8 +528,6 @@ class CastPlayer(HassPlayer):
         # enqueue second item to allow on-player control of next
         # (or shout next track from google assistant)
         await asyncio.sleep(1)
-        if self.active_queue.stream and self.active_queue.stream.is_alert:
-            return
         if self.active_queue.stream and len(self.active_queue.items) < 2:
             return
         enqueue_data = {**app_data}
@@ -604,8 +599,8 @@ class CastPlayer(HassPlayer):
 class SonosPlayer(HassPlayer):
     """Representation of Hass player from Sonos integration."""
 
-    _attr_default_sample_rates: Tuple[int] = (44100, 48000)
-    _attr_default_stream_type: ContentType = ContentType.FLAC
+    _attr_max_sample_rate: int = 48000
+    _attr_stream_type: ContentType = ContentType.FLAC
     _attr_use_mute_as_power: bool = True
     _sonos_paused = False
 
@@ -683,8 +678,8 @@ class SonosPlayer(HassPlayer):
 class DlnaPlayer(HassPlayer):
     """Representation of Hass player from DLNA integration."""
 
-    _attr_default_sample_rates: Tuple[int] = (44100, 48000)
-    _attr_default_stream_type: ContentType = ContentType.MP3
+    _attr_max_sample_rate: int = 48000
+    _attr_stream_type: ContentType = ContentType.MP3
 
     async def play_url(self, url: str) -> None:
         """Play the specified url on the player."""
@@ -725,8 +720,8 @@ class DlnaPlayer(HassPlayer):
 class HassGroupPlayer(HassPlayer):
     """Mapping from Home Assistant Grouped Mediaplayer to Music Assistant Player."""
 
-    _attr_default_sample_rates: Tuple[int] = (44100, 48000)
-    _attr_default_stream_type: ContentType = ContentType.FLAC
+    _attr_max_sample_rate: int = 48000
+    _attr_stream_type: ContentType = ContentType.FLAC
 
     def __init__(self, *args, **kwargs) -> None:
         """Initialize player."""
